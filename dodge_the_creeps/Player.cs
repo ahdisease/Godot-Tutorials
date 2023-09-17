@@ -3,6 +3,9 @@ using System;
 
 public partial class Player : Area2D
 {
+	[Signal]
+	public delegate void HitEventHandler();
+	
 	[Export]
 	public int Speed {get; set;} = 400;
 	public Vector2 ScreenSize;
@@ -10,13 +13,20 @@ public partial class Player : Area2D
 	public override void _Ready()
 	{
 		ScreenSize = GetViewportRect().Size;
-
+		Hide();
 	}
 
 	public override void _Process(double delta)
 	{
 		Vector2 currentMovement = DetectMovement(delta);
 		AnimateMovement(currentMovement);
+	}
+	
+	public void Start(Vector2 position)
+	{
+		Position = position;
+		Show();
+		GetNode<CollisionShape2D>("CollisionShape2D").Disabled = false;
 	}
 	
 	private Vector2 DetectMovement(double delta) {
@@ -76,4 +86,18 @@ public partial class Player : Area2D
 			animatedSprite2D.FlipV = velocity.Y > 0;
 		}
 	}
+	
+	//node connections
+	private void OnBodyEntered(Node2D body)
+	{
+		//remove player sprite
+		Hide();
+		EmitSignal(SignalName.Hit);
+		
+		//disable player to prevent more than one "Hit" signal
+		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+	}
 }
+
+
+
