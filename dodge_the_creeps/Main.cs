@@ -17,6 +17,7 @@ public partial class Main : Node
 	
 	public void NewGame()
 	{
+		GetTree().CallGroup("mobs",Node.MethodName.QueueFree);
 		_score = 0;
 		
 		HUD hud = GetNode<HUD>("HUD");
