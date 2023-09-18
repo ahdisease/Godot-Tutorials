@@ -8,20 +8,21 @@ public partial class Main : Node
 	
 	private int _score;
 	
-	public override void _Ready()
-	{
-		NewGame();
-	}
-	
 	public void GameOver()
 	{
 		GetNode<Timer>("MobTimer").Stop();
 		GetNode<Timer>("ScoreTimer").Stop();
+		GetNode<HUD>("HUD").ShowGameOver();
 	}
 	
 	public void NewGame()
 	{
+		GetTree().CallGroup("mobs",Node.MethodName.QueueFree);
 		_score = 0;
+		
+		HUD hud = GetNode<HUD>("HUD");
+		hud.UpdateScore(_score);
+		hud.ShowMessage("Get Ready!");
 		
 		Player player = GetNode<Player>("Player");
 		Marker2D startPosition = GetNode<Marker2D>("StartPosition");
@@ -39,6 +40,7 @@ public partial class Main : Node
 	private void OnScoreTimerTimeout()
 	{
 		_score++;
+		GetNode<HUD>("HUD").UpdateScore(_score);
 	}
 	
 	private void OnMobTimerTimeout()
@@ -68,15 +70,3 @@ public partial class Main : Node
 		AddChild(mob);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
