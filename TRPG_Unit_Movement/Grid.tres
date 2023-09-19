@@ -1,8 +1,8 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://b7udop7een4nl"]
+[gd_resource type="Resource" script_class="Grid" load_steps=2 format=3 uid="uid://lykv1so17rph"]
 
-[ext_resource type="Script" path="res://Grid.cs" id="1_bufg4"]
+[ext_resource type="Script" path="res://Grid.cs" id="1_u8htj"]
 
 [resource]
-resource_name = "Grid"
-script = ExtResource("1_bufg4")
+script = ExtResource("1_u8htj")
 size = Vector2(20, 20)
+cellSize = Vector2(80, 80)

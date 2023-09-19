@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://512kwhroj6vj"]
+[gd_scene load_steps=7 format=3 uid="uid://512kwhroj6vj"]
 
+[ext_resource type="Script" path="res://Units/Unit.cs" id="1_b4fbs"]
 [ext_resource type="Texture2D" uid="uid://dabt57vxio0ux" path="res://Units/unit_shadow.svg" id="1_g56tr"]
 
 [sub_resource type="Animation" id="Animation_g85ua"]
@@ -57,6 +58,7 @@ _data = {
 }
 
 [node name="Unit" type="Path2D"]
+script = ExtResource("1_b4fbs")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="."]
 rotates = false
