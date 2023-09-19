@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://b7udop7een4nl"]
+
+[ext_resource type="Script" path="res://Grid.cs" id="1_bufg4"]
+
+[resource]
+resource_name = "Grid"
+script = ExtResource("1_bufg4")
+size = Vector2(20, 20)
