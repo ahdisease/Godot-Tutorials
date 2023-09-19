@@ -3,11 +3,11 @@ using System;
 public partial class Grid : Node
 {
 	[Export]
-	Vector2 size = new Vector2(20,20);
+	public Vector2 size = new Vector2(20,20);
 	[Export]
-	Vector2 cellSize = new Vector2(80,80);
+	public Vector2 cellSize = new Vector2(80,80);
 
-    private Vector2 HalfCellSize()
+	private Vector2 HalfCellSize()
 	{
 		return cellSize / 2;
 	}
