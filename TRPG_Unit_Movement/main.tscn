@@ -1,13 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://ceedn31sbjd1k"]
+[gd_scene load_steps=4 format=3 uid="uid://ceedn31sbjd1k"]
 
-[ext_resource type="PackedScene" path="res://Background/Map.tscn" id="1_2issh"]
+[ext_resource type="PackedScene" uid="uid://de53ukdqyusan" path="res://Background/Map.tscn" id="1_2issh"]
 [ext_resource type="PackedScene" uid="uid://512kwhroj6vj" path="res://Units/unit.tscn" id="2_lcnsa"]
-[ext_resource type="Script" path="res://Grid.cs" id="3_ptgm6"]
-
-[sub_resource type="Resource" id="Resource_b5sbg"]
-script = ExtResource("3_ptgm6")
-size = Vector2(20, 20)
-cellSize = Vector2(80, 80)
+[ext_resource type="Resource" uid="uid://lykv1so17rph" path="res://Grid.tres" id="3_mod71"]
 
 [node name="Main" type="Node2D"]
 
@@ -15,4 +10,5 @@ cellSize = Vector2(80, 80)
 
 [node name="Unit" parent="Map" instance=ExtResource("2_lcnsa")]
 position = Vector2(100, 100)
-grid = SubResource("Resource_b5sbg")
+grid = ExtResource("3_mod71")
+moveSpeed = 2.0

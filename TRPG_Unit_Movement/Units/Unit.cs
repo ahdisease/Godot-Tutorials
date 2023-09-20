@@ -10,7 +10,7 @@ public partial class Unit : Path2D
     [Export] public float moveSpeed = 600.00f;
 
     public Vector2 Cell { private set; get; } = Vector2.Zero;
-    public bool IsSelected { private set ; get; } = false;
+    public bool IsSelected { private set; get; } = false;
     public bool IsWalking { private set; get; } = false;
 
     //cached nodes
@@ -26,6 +26,7 @@ public partial class Unit : Path2D
         CacheNodes();
         grid = ResourceLoader.Load<Grid>("res://Grid.tres");
         SetSkin(Skin);
+
         //set process false
         SetProcess(false);
 
@@ -51,7 +52,7 @@ public partial class Unit : Path2D
 
         //when the end of the path is reached, set IsWalking to off.
         //This is done using the PathFollow2D node property "offset"
-        
+
         //when offset reaches 1,
         if (_path_follow.HOffset >= 1)
         {
@@ -59,15 +60,11 @@ public partial class Unit : Path2D
 
             //reset properties for future path following
             _path_follow.HOffset = 0f;
-            Position = grid.CalculateGridCoordinates(Cell);
+            Position = grid.CalculateMapPosition(Cell);
             Curve.ClearPoints();
 
             EmitSignal("WalkFinished");
         }
-
-
-
-
     }
 
     public void WalkAlong(Vector2[] path)
@@ -85,7 +82,8 @@ public partial class Unit : Path2D
             Curve.AddPoint(grid.CalculateMapPosition(point)-Position);
         }
         //set unit's cell using the new position
-        Cell = path[path.Length - 1];
+        setCell(path[path.Length - 1]);
+
         //set IsWalking to true
         SetIsWalking(true);
     }
