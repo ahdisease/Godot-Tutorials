@@ -25,7 +25,7 @@ public partial class Unit : Path2D
     {
         CacheNodes();
         grid = ResourceLoader.Load<Grid>("res://Grid.tres");
-
+        SetSkin(Skin);
         //set process false
         SetProcess(false);
 
@@ -93,7 +93,7 @@ public partial class Unit : Path2D
     //Descriptive functions
     private void CacheNodes()
     {
-        _sprite = GetNode<Sprite2D>("Sprite");
+        _sprite = GetNode<Sprite2D>("PathFollow2D/Sprite");
         _anim_player = GetNode<AnimationPlayer>("AnimationPlayer");
         _path_follow = GetNode<PathFollow2D>("PathFollow2D");
     }
