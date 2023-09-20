@@ -3,10 +3,10 @@ using System;
 
 public partial class Unit : Path2D
 {
-    [Export] public Grid grid = ResourceLoader.Load<Grid>("res://Grid.tres","Grid");
+    [Export] public Grid grid;
     [Export] public int moveRange;
-    [Export] public Texture2D Skin { private set; get; }
-    [Export] public Vector2 SkinOffset { private set; get; } = Vector2.Zero;
+    [Export] public Texture2D Skin { set; get; }
+    [Export] public Vector2 SkinOffset { set; get; } = Vector2.Zero;
     [Export] public float moveSpeed = 600.00f;
 
     public Vector2 Cell { private set; get; } = Vector2.Zero;
@@ -24,6 +24,7 @@ public partial class Unit : Path2D
     public override void _Ready()
     {
         CacheNodes();
+        grid = ResourceLoader.Load<Grid>("res://Grid.tres");
 
         //set process false
         SetProcess(false);
@@ -37,6 +38,10 @@ public partial class Unit : Path2D
         {
             Curve = new Curve2D();
         }
+
+        //this code is for testing purposes only
+        Vector2[] testPath = new Vector2[] {new Vector2(2,2), new Vector2(2, 5), new Vector2(8, 5), new Vector2(8, 7)};
+        WalkAlong(testPath);
     }
 
     public override void _Process(double delta)

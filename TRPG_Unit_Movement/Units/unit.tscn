@@ -1,7 +1,23 @@
-[gd_scene load_steps=7 format=3 uid="uid://512kwhroj6vj"]
+[gd_scene load_steps=8 format=3 uid="uid://512kwhroj6vj"]
 
 [ext_resource type="Script" path="res://Units/Unit.cs" id="1_b4fbs"]
 [ext_resource type="Texture2D" uid="uid://dabt57vxio0ux" path="res://Units/unit_shadow.svg" id="1_g56tr"]
+[ext_resource type="Texture2D" uid="uid://dgo7cfusbqkea" path="res://Units/squirrel.png" id="3_7ixoo"]
+
+[sub_resource type="Animation" id="Animation_vrpnd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PathFollow2D/Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1.5, 1.5, 1.5, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_g85ua"]
 resource_name = "idle"
@@ -35,21 +51,6 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 1), Color(1.5, 1.5, 1.5, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_vrpnd"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("PathFollow2D/Sprite:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1.5, 1.5, 1.5, 1)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_y2nev"]
 _data = {
 "RESET": SubResource("Animation_vrpnd"),
@@ -59,6 +60,7 @@ _data = {
 
 [node name="Unit" type="Path2D"]
 script = ExtResource("1_b4fbs")
+metadata/_edit_group_ = true
 
 [node name="PathFollow2D" type="PathFollow2D" parent="."]
 rotates = false
@@ -71,7 +73,8 @@ texture = ExtResource("1_g56tr")
 
 [node name="Sprite" type="Sprite2D" parent="PathFollow2D"]
 modulate = Color(1.5, 1.5, 1.5, 1)
-scale = Vector2(0.05, 0.05)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_7ixoo")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
