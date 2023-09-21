@@ -1,6 +1,7 @@
 using Godot;
 using System;
-public partial class Grid : Node
+[GlobalClass]
+public partial class Grid : Resource
 {
 	[Export]
 	public Vector2 size = new Vector2(20,20);

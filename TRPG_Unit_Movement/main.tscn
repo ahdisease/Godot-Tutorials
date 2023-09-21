@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://ceedn31sbjd1k"]
+
+[ext_resource type="PackedScene" uid="uid://de53ukdqyusan" path="res://Background/Map.tscn" id="1_2issh"]
+[ext_resource type="PackedScene" uid="uid://512kwhroj6vj" path="res://Units/unit.tscn" id="2_lcnsa"]
+[ext_resource type="Texture2D" uid="uid://dgo7cfusbqkea" path="res://Units/squirrel.png" id="4_byvn8"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Map" parent="." instance=ExtResource("1_2issh")]
+
+[node name="Unit" parent="." instance=ExtResource("2_lcnsa")]
+Skin = ExtResource("4_byvn8")
+SkinOffset = Vector2(2, -38)
