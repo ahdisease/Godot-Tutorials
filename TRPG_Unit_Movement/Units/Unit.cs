@@ -7,7 +7,7 @@ public partial class Unit : Path2D
     [Export] public int moveRange;
     [Export] public Texture2D Skin { set; get; }
     [Export] public Vector2 SkinOffset { set; get; } = Vector2.Zero;
-    [Export] public float moveSpeed = 600.00f;
+    [Export] public float moveSpeedInPixelsPerSecond = 400f;
 
     public Vector2 Cell { private set; get; } = Vector2.Zero;
     public bool IsSelected { private set; get; } = false;
@@ -26,6 +26,7 @@ public partial class Unit : Path2D
         CacheNodes();
         grid = ResourceLoader.Load<Grid>("res://Grid.tres");
         SetSkin(Skin);
+        _anim_player.Play("idle");
 
         //set process false
         SetProcess(false);
@@ -47,19 +48,21 @@ public partial class Unit : Path2D
 
     public override void _Process(double delta)
     {
+        //note: the tutorial suggests using "offset",
+        //but that property seems to have been replaced by
+        //"Progress" and "ProgressRatio" properties since writing
+
         //follow path
-        _path_follow.HOffset += moveSpeed * (float)delta;
+        _path_follow.Progress += moveSpeedInPixelsPerSecond * (float)delta;
 
         //when the end of the path is reached, set IsWalking to off.
-        //This is done using the PathFollow2D node property "offset"
-
         //when offset reaches 1,
-        if (_path_follow.HOffset >= 1)
+        if (_path_follow.ProgressRatio >= 1)
         {
             SetIsWalking(false);
 
             //reset properties for future path following
-            _path_follow.HOffset = 0f;
+            _path_follow.Progress = 0f;
             Position = grid.CalculateMapPosition(Cell);
             Curve.ClearPoints();
 

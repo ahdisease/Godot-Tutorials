@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://512kwhroj6vj"]
+[gd_scene load_steps=7 format=3 uid="uid://512kwhroj6vj"]
 
 [ext_resource type="Script" path="res://Units/Unit.cs" id="1_b4fbs"]
 [ext_resource type="Texture2D" uid="uid://dabt57vxio0ux" path="res://Units/unit_shadow.svg" id="1_g56tr"]
-[ext_resource type="Texture2D" uid="uid://dgo7cfusbqkea" path="res://Units/squirrel.png" id="3_7ixoo"]
 
 [sub_resource type="Animation" id="Animation_vrpnd"]
 length = 0.001
@@ -60,7 +59,7 @@ _data = {
 
 [node name="Unit" type="Path2D"]
 script = ExtResource("1_b4fbs")
-Skin = ExtResource("3_7ixoo")
+moveSpeedInPixelsPerSecond = 600.0
 metadata/_edit_group_ = true
 
 [node name="PathFollow2D" type="PathFollow2D" parent="."]

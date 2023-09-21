@@ -2,13 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://de53ukdqyusan" path="res://Background/Map.tscn" id="1_2issh"]
 [ext_resource type="PackedScene" uid="uid://512kwhroj6vj" path="res://Units/unit.tscn" id="2_lcnsa"]
-[ext_resource type="Resource" uid="uid://lykv1so17rph" path="res://Grid.tres" id="3_mod71"]
+[ext_resource type="Texture2D" uid="uid://dgo7cfusbqkea" path="res://Units/squirrel.png" id="4_byvn8"]
 
 [node name="Main" type="Node2D"]
 
 [node name="Map" parent="." instance=ExtResource("1_2issh")]
 
-[node name="Unit" parent="Map" instance=ExtResource("2_lcnsa")]
-position = Vector2(100, 100)
-grid = ExtResource("3_mod71")
-moveSpeed = 2.0
+[node name="Unit" parent="." instance=ExtResource("2_lcnsa")]
+Skin = ExtResource("4_byvn8")
+SkinOffset = Vector2(0, 100)
