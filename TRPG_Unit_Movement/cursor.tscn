@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://htnjn3drjcn1"]
+
+[node name="Cursor" type="Node2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
