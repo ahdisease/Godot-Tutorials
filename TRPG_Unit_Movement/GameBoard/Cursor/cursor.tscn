@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://htnjn3drjcn1"]
+[gd_scene load_steps=3 format=3 uid="uid://htnjn3drjcn1"]
 
 [ext_resource type="Texture2D" uid="uid://bio8p0i75gai3" path="res://GameBoard/Cursor/menu_selection_arrow.png" id="1_0kf6b"]
+[ext_resource type="Script" path="res://GameBoard/Cursor/Cursor.cs" id="1_tupra"]
 
 [node name="Cursor" type="Node2D"]
+script = ExtResource("1_tupra")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(79, -79)
