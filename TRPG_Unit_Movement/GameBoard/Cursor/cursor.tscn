@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://htnjn3drjcn1"]
+
+[ext_resource type="Texture2D" uid="uid://bio8p0i75gai3" path="res://GameBoard/Cursor/menu_selection_arrow.png" id="1_0kf6b"]
+
+[node name="Cursor" type="Node2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(79, -79)
+rotation = 2.35619
+texture = ExtResource("1_0kf6b")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
