@@ -38,26 +38,24 @@ public partial class Cursor : Node2D
     }
 
 	public override void _UnhandledInput(InputEvent _event) {
-		
-		if (_event.GetType() == typeof(InputEventMouseMotion)) 
+
+		if (_event.GetType() == typeof(InputEventMouseMotion))
 		{
-            //set cell to closest grid cell if mouse is moved
+			//set cell to closest grid cell if mouse is moved
 			//since I'm new to the "Get" method, the try block felt safer
-            var eventPosition = _event.Get("position");
+			var eventPosition = _event.Get("position");
 			Vector2 eventPositionVector;
 			try
 			{
-				eventPositionVector = (Vector2) eventPosition;
-			}
-			catch (InvalidCastException exception)
+				eventPositionVector = (Vector2)eventPosition;
+			} catch (InvalidCastException exception)
 			{
 				GD.Print(exception);
 				return;
 			}
 
-            SetCell(grid.CalculateGridCoordinates(eventPositionVector));
-		}
-		else if (_event.IsActionPressed("click") || _event.IsActionPressed("ui_accept"))
+			SetCell(grid.CalculateGridCoordinates(eventPositionVector));
+		} else if (_event.IsActionPressed("click") || _event.IsActionPressed("ui_accept"))
 		{
 			//for interactions, emit a signal and close the event
 			EmitSignal(SignalName.AcceptPressed, cell);
@@ -78,19 +76,19 @@ public partial class Cursor : Node2D
 		//parse directional input
 		if (_event.IsAction("ui_right"))
 		{
-			SetCell(this.cell += Vector2.Right);
+			SetCell(this.cell + Vector2.Right);
 		}
 		else if (_event.IsAction("ui_up"))
 		{
-            SetCell(this.cell += Vector2.Up);
+            SetCell(this.cell + Vector2.Up);
         } 
 		else if (_event.IsAction("ui_left"))
         {
-            SetCell(this.cell += Vector2.Left);
+            SetCell(this.cell + Vector2.Left);
         } 
 		else if (_event.IsAction("ui_down"))
         {
-            SetCell(this.cell += Vector2.Down);
+            SetCell(this.cell + Vector2.Down);
         }
     }
 
