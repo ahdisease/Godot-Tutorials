@@ -12,7 +12,7 @@ public partial class Pathfinder : RefCounted
     private Grid _grid;
     private AStar2D _astar = new AStar2D();
 
-    public void _Init(Grid grid, Vector2[] walkableCells)
+    public Pathfinder(Grid grid, Vector2[] walkableCells)
     {
         //we can pass these values from the UnitPath script that we will write later
         _grid = grid;
