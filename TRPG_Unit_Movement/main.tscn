@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://ceedn31sbjd1k"]
+[gd_scene load_steps=7 format=3 uid="uid://ceedn31sbjd1k"]
 
 [ext_resource type="PackedScene" uid="uid://de53ukdqyusan" path="res://Background/Map.tscn" id="1_2issh"]
+[ext_resource type="Script" path="res://GameBoard/GameBoard.cs" id="1_nujip"]
 [ext_resource type="PackedScene" uid="uid://512kwhroj6vj" path="res://Units/unit.tscn" id="2_lcnsa"]
+[ext_resource type="Resource" uid="uid://lykv1so17rph" path="res://Grid.tres" id="2_pdmrv"]
 [ext_resource type="Texture2D" uid="uid://dgo7cfusbqkea" path="res://Units/squirrel.png" id="4_byvn8"]
 [ext_resource type="PackedScene" uid="uid://htnjn3drjcn1" path="res://GameBoard/Cursor/cursor.tscn" id="4_kklrj"]
 
@@ -9,8 +11,13 @@
 
 [node name="Map" parent="." instance=ExtResource("1_2issh")]
 
-[node name="Unit" parent="." instance=ExtResource("2_lcnsa")]
+[node name="GameBoard" type="Node2D" parent="."]
+script = ExtResource("1_nujip")
+_grid = ExtResource("2_pdmrv")
+
+[node name="Unit" parent="GameBoard" instance=ExtResource("2_lcnsa")]
+grid = ExtResource("2_pdmrv")
 Skin = ExtResource("4_byvn8")
 SkinOffset = Vector2(2, -38)
 
-[node name="Cursor" parent="." instance=ExtResource("4_kklrj")]
+[node name="Cursor" parent="GameBoard" instance=ExtResource("4_kklrj")]
