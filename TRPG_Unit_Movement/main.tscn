@@ -17,6 +17,7 @@ _grid = ExtResource("2_pdmrv")
 
 [node name="Unit" parent="GameBoard" instance=ExtResource("2_lcnsa")]
 grid = ExtResource("2_pdmrv")
+moveRange = 2
 Skin = ExtResource("4_byvn8")
 SkinOffset = Vector2(2, -38)
 

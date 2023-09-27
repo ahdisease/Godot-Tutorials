@@ -42,8 +42,8 @@ public partial class Unit : Path2D
         }
 
         //this code is for testing purposes only
-        Vector2[] testPath = new Vector2[] {new Vector2(2,2), new Vector2(2, 5), new Vector2(8, 5), new Vector2(8, 7)};
-        WalkAlong(testPath);
+        //Vector2[] testPath = new Vector2[] {new Vector2(2,2), new Vector2(2, 5), new Vector2(8, 5), new Vector2(8, 7)};
+        //WalkAlong(testPath);
     }
 
     public override void _Process(double delta)
