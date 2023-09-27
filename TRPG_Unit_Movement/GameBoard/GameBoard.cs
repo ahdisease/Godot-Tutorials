@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class GameBoard : Node2D
 {
@@ -12,21 +13,21 @@ public partial class GameBoard : Node2D
 
     //cached Nodes
     UnitOverlay _unitOverlay;
+    UnitPath _unitPath;
 
     //state variables
     Dictionary<Vector2,Unit> _units = new Dictionary<Vector2,Unit>();
+    Unit _activeUnit = null;
+    Vector2[] _walkableCells = null;
+    bool _canIssueCommands = true;
+
 
     public override void _Ready()
 	{
         _unitOverlay = GetNode<UnitOverlay>("UnitOverlay");
+        _unitPath = GetNode<UnitPath>("UnitPath");
         
         _Reinitialize();
-
-        var testUnit = GetNode<Unit>("Unit");
-
-        var test = GetWalkableCells(testUnit);
-        _unitOverlay.Draw(test);
-
     }
 
     private bool IsOccupied(Vector2 position)
@@ -114,6 +115,82 @@ public partial class GameBoard : Node2D
             }
 
             toBeChecked.Push(neighboringCell);
+        }
+    }
+    
+    public void _SelectUnit(Vector2 cell)
+    {
+        if (_units[cell] == null)
+        {
+            return;
+        }
+
+        _activeUnit = _units[cell];
+        _activeUnit.SetIsSelected(true);
+        _walkableCells = GetWalkableCells(_activeUnit);
+        _unitOverlay.Draw(_walkableCells);
+        _unitPath.Initialize(_walkableCells);
+    }
+
+    public void _DeselectUnit()
+    {
+        if (_activeUnit == null)
+        {
+            return;
+        }
+
+        _activeUnit.SetIsSelected(false);
+        _unitOverlay.Clear();
+        _unitPath.Stop();
+    }
+
+    public void _ClearActiveUnit()
+    {
+        if ( _activeUnit == null) { return; }
+
+        _activeUnit = null;
+        _walkableCells = null;
+    }
+
+    public void _MoveActiveUnit(Vector2 newCell)
+    {
+        if(IsOccupied(newCell) || !_walkableCells.Contains(newCell))
+        {
+            return;
+        }
+
+        _units.Remove(_activeUnit.Cell);
+        _units[newCell] = _activeUnit;
+
+        _DeselectUnit();
+
+        _activeUnit.WalkAlong(_unitPath.CurrentPath);
+        
+        _ClearActiveUnit();
+    }
+
+    public void _ResetCanIssueCommands()
+    {
+        _canIssueCommands = true;
+    }
+
+    public void OnCursorAcceptPressed(Vector2 cell)
+    {
+        
+        if (_activeUnit == null)
+        {
+            _SelectUnit(cell);
+        } else if (_activeUnit.IsSelected)
+        {
+            _MoveActiveUnit(cell);
+        }
+    }
+
+    public void OnCursorMoved(Vector2 cell)
+    {
+        if (_activeUnit != null && _activeUnit.IsSelected)
+        {
+            _unitPath.DrawPath(_activeUnit.Cell, cell);
         }
     }
 }

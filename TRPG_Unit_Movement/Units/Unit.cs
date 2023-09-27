@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class Unit : Path2D
 {
@@ -89,6 +90,7 @@ public partial class Unit : Path2D
 
         //set IsWalking to true
         SetIsWalking(true);
+        return;
     }
 
     //Descriptive functions

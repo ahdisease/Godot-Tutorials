@@ -7,10 +7,10 @@ public partial class UnitPath : TileMap
 	[Export] Grid grid;
 
 	//state variables
-	Pathfinder _pathfinder;
-	Vector2[] currentPath;		//cached from pathfinder, used for WalkAlong()
+	private Pathfinder _pathfinder;
+	public Vector2[] CurrentPath { get; private set; }		//cached from pathfinder, used for WalkAlong()
 
-	private void Initialize(Vector2[] walkableCells)
+	public void Initialize(Vector2[] walkableCells)
 	{
 		_pathfinder = new Pathfinder(grid,walkableCells);
 	}
@@ -20,18 +20,18 @@ public partial class UnitPath : TileMap
 	/// </summary>
 	/// <param name="cellStart"></param>
 	/// <param name="cellEnd"></param>
-	private void DrawPath(Vector2 cellStart, Vector2 cellEnd)
+	public void DrawPath(Vector2 cellStart, Vector2 cellEnd)
 	{
         //remove previous values on the tilemap
         Clear();    
 
 		//determine the best path between two points
-		currentPath = _pathfinder.CalculatePointPath(cellStart, cellEnd);
+		CurrentPath = _pathfinder.CalculatePointPath(cellStart, cellEnd);
 
 		//create Godot array to hold Vector2I equivalents of Vector2 objects used in Pathfinder object.
 		//this is necessary because SetCellsTerrainPath has no overload to accept Vector2 objects OR c# array objects 
 		Godot.Collections.Array<Vector2I> currentPathI = new Godot.Collections.Array<Vector2I>();
-		foreach (Vector2 cell in currentPath )
+		foreach (Vector2 cell in CurrentPath )
 		{
 			currentPathI.Add(new Vector2I(Mathf.FloorToInt(cell.X), Mathf.FloorToInt(cell.Y)));
 		}
@@ -62,7 +62,7 @@ public partial class UnitPath : TileMap
     /// <summary>
     /// Clears any tilemap path drawing and removes reference to current Pathfinder object to allow for garbage collection
     /// </summary>
-    private void Stop()
+    public void Stop()
 	{
 		_pathfinder = null;
 		Clear();

@@ -122,7 +122,7 @@ public partial class Cursor : Node2D
 		//update sprite position
 		Position = grid.CalculateMapPosition(cell);
 
-		EmitSignal(SignalName.CursorMoved);
+		EmitSignal(SignalName.CursorMoved, cell);
 
 		//reset rate limiting timer
 		_timer.Start();
