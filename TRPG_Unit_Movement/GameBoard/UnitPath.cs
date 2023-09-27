@@ -15,33 +15,61 @@ public partial class UnitPath : TileMap
 		_pathfinder = new Pathfinder(grid,walkableCells);
 	}
 
+	/// <summary>
+	/// Generates a tilemap image of the currently selected path between two cells. 
+	/// </summary>
+	/// <param name="cellStart"></param>
+	/// <param name="cellEnd"></param>
 	private void DrawPath(Vector2 cellStart, Vector2 cellEnd)
 	{
-		Clear();    //removes previous values on the tilemap
+        //remove previous values on the tilemap
+        Clear();    
 
-		//currentPath = _pathfinder.CalculatePointPath(cellStart, cellEnd);
+		//determine the best path between two points
+		currentPath = _pathfinder.CalculatePointPath(cellStart, cellEnd);
 
-		//var currentPath = new Godot.Collections.Array<Vector2> { new Vector2(4, 4), new Vector2(5, 4), new Vector2(5, 5), new Vector2(5, 6) };
-		var currentPathI = new Godot.Collections.Array<Vector2I> { new Vector2I(4, 4), new Vector2I(5, 4), new Vector2I(5, 5), new Vector2I(5, 6) };
+		//create Godot array to hold Vector2I equivalents of Vector2 objects used in Pathfinder object.
+		//this is necessary because SetCellsTerrainPath has no overload to accept Vector2 objects OR c# array objects 
+		Godot.Collections.Array<Vector2I> currentPathI = new Godot.Collections.Array<Vector2I>();
+		foreach (Vector2 cell in currentPath )
+		{
+			currentPathI.Add(new Vector2I(Mathf.FloorToInt(cell.X), Mathf.FloorToInt(cell.Y)));
+		}
 
-
-
+		//this method sets tiles at the vectors returned from the CalculatePointPath method.
+		//it utilizes the first terrain set and first terrain index for the tileset in the Tilemap node
 		SetCellsTerrainPath(0, currentPathI, 0, 0);
-		//foreach (Vector2I cell in currentPathI)
-		//{
 
-		//          //SetCell(0, new Vector2I(Mathf.FloorToInt(cell.X), Mathf.FloorToInt(cell.Y)), 0);
-		//          SetCell(0, cell, 0);
-		//      }
-	}
+        /*see this link for the official Godot tutorial on how to implement a terrain generated Tilemap:
+         * Creating terrain sets: https://docs.godotengine.org/en/latest/tutorials/2d/using_tilesets.html#doc-using-tilesets-creating-terrain-sets
+         * Utilizing terrain sets in a TileMap: https://docs.godotengine.org/en/latest/tutorials/2d/using_tilemaps.html#handling-tile-connections-automatically-using-terrains
+		*/
 
-	private void Stop()
+        /*
+		 * It's possible that the following code could be used to avoid use of the Godot.Collections.Array, but
+		 * it would most likely require a caching of the TileSetAtlas. Since I'm still rather new to Godot and there's 
+		 * a pretty good terrain tutorial that makes no mention of an atlas, the above is simpler, if still less satisfying
+		 *
+		
+		foreach (Vector2 cell in currentPath)
+		{
+
+			SetCell(0, new Vector2I(Mathf.FloorToInt(cell.X), Mathf.FloorToInt(cell.Y)), 0);
+		}
+		*/
+    }
+
+    /// <summary>
+    /// Clears any tilemap path drawing and removes reference to current Pathfinder object to allow for garbage collection
+    /// </summary>
+    private void Stop()
 	{
 		_pathfinder = null;
 		Clear();
 	}
 
-    //using _Ready to test this script
+    //below implementation of _Ready can be used to test this script until the Gameboard is implemented
+	/*
     public override void _Ready()
     {
         Vector2 rect_start = new Vector2(4,4);
@@ -63,4 +91,5 @@ public partial class UnitPath : TileMap
 
 		DrawPath(rect_start,path_end);
     }
+	*/
 }

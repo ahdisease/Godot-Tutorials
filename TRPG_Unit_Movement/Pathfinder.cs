@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 //RefCounted is the C# equivalent to Reference in GDScript. Because of the
-//garbage collector, unreferenced items will not instantly be removed
+//garbage collector, unreferenced instances will not instantly be removed
 public partial class Pathfinder : RefCounted
 {
 
@@ -14,7 +14,7 @@ public partial class Pathfinder : RefCounted
 
     public Pathfinder(Grid grid, Vector2[] walkableCells)
     {
-        //we can pass these values from the UnitPath script that we will write later
+        //we can pass these values from the UnitPath script
         _grid = grid;
 
         //we define a dictionary with cell 2D coordinates as the key and 1D as the value
@@ -26,29 +26,38 @@ public partial class Pathfinder : RefCounted
         {
             cellMappings.Add(cell, _grid.AsIndex(cell));
         }
-
+        
         AddAndConnectPoints(cellMappings);
     }
 
-    //returns the path found between two cells as an array
+    /// <summary>
+    /// Returns the path found between two cells by the instanced AStar2D object as an array of Vector2 objects.
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
     public Vector2[] CalculatePointPath(Vector2 start, Vector2 end)
     {
-
+        //first we confirm both points are valid grid coordinates
         int startIndex = _grid.AsIndex(start);
         int endIndex = _grid.AsIndex(end);
 
         if (_astar.HasPoint(endIndex) && _astar.HasPoint(startIndex))
         {
-            Vector2[] pointPath = _astar.GetPointPath(startIndex, endIndex);
-            return pointPath;
+            //if so, we find the path between them
+            return _astar.GetPointPath((long)startIndex, (long)endIndex); ;
         } else
         {
+            //otherwise we send back an empty vector (though we could also throw an exception)
             return Array.Empty<Vector2>();
         }
 
     }
 
-    //Adds and connects walkable cells to Astar2D object
+    /// <summary>
+    /// Adds traversable cells to Astar2D object and connects neighboring cells to allow pathfinding 
+    /// </summary>
+    /// <param name="cellMappings"></param>
     private void AddAndConnectPoints(Dictionary<Vector2, int> cellMappings)
     {
         //register all points in the AStar graph
@@ -56,11 +65,14 @@ public partial class Pathfinder : RefCounted
         {
             _astar.AddPoint(cellMappings[point], point);
         }
-        GD.Print(_astar.GetPointCount());
+        
         //connect points to their neighbors
         foreach (Vector2 point in cellMappings.Keys)
         {
-            foreach(int neighborIndex in FindNeighborIndices(point,cellMappings))
+
+            List<int> neighborIndices = FindNeighborIndices(point, cellMappings);
+
+            foreach (int neighborIndex in neighborIndices)
             {
                 _astar.ConnectPoints(cellMappings[point], neighborIndex);
             }
@@ -68,16 +80,21 @@ public partial class Pathfinder : RefCounted
         
     }
 
-    private IEnumerable<int> FindNeighborIndices(Vector2 point, Dictionary<Vector2, int> cellMappings)
+    /// <summary>
+    /// <para>Identifies the neighboring cells in a grid and adds valid cells to a List in the form of a 1D array index.</para>
+    /// <para>Because this is intended for use in initializing the AStar2D object, connections that have already been added to the object are skipped.</para>
+    /// </summary>
+    /// <param name="point"></param>
+    /// <param name="cellMappings"></param>
+    private List<int> FindNeighborIndices(Vector2 point, Dictionary<Vector2, int> cellMappings)
     {
         //since the number of connections is a little wiggly based on
-        //weird math and where things meet, we'll return this list as
-        //an array if we have to
+        //weird math and where things meet, we'll use a list
         List<int> neighborIndices = new List<int>();
 
         foreach (Vector2 direction in DIRECTIONS)
         {
-            //generate a potential neighbor based on vector
+            //generate a potential neighbor based on directional vector
             Vector2 neighbor = point + direction;
 
             //only include walkable cells
@@ -86,8 +103,8 @@ public partial class Pathfinder : RefCounted
                 continue;
             }
 
-            //add cell to array if not a duplicate
-            if (_astar.ArePointsConnected(cellMappings[point], cellMappings[neighbor]))
+            //add cell to list if not a duplicate
+            if (!_astar.ArePointsConnected(cellMappings[point], cellMappings[neighbor]))
             {
                 neighborIndices.Add(cellMappings[neighbor]);
             }
@@ -95,7 +112,5 @@ public partial class Pathfinder : RefCounted
         }
 
         return neighborIndices;
-
-
     }
 }
