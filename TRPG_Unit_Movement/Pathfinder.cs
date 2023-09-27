@@ -37,9 +37,10 @@ public partial class Pathfinder : RefCounted
         int startIndex = _grid.AsIndex(start);
         int endIndex = _grid.AsIndex(end);
 
-        if (_astar.HasPoint(startIndex) && _astar.HasPoint(endIndex))
+        if (_astar.HasPoint(endIndex) && _astar.HasPoint(startIndex))
         {
-            return _astar.GetPointPath(startIndex, endIndex);
+            Vector2[] pointPath = _astar.GetPointPath(startIndex, endIndex);
+            return pointPath;
         } else
         {
             return Array.Empty<Vector2>();
@@ -55,7 +56,7 @@ public partial class Pathfinder : RefCounted
         {
             _astar.AddPoint(cellMappings[point], point);
         }
-
+        GD.Print(_astar.GetPointCount());
         //connect points to their neighbors
         foreach (Vector2 point in cellMappings.Keys)
         {
@@ -64,6 +65,7 @@ public partial class Pathfinder : RefCounted
                 _astar.ConnectPoints(cellMappings[point], neighborIndex);
             }
         }
+        
     }
 
     private IEnumerable<int> FindNeighborIndices(Vector2 point, Dictionary<Vector2, int> cellMappings)
