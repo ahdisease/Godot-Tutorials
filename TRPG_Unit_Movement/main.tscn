@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ceedn31sbjd1k"]
+[gd_scene load_steps=8 format=3 uid="uid://ceedn31sbjd1k"]
 
 [ext_resource type="PackedScene" uid="uid://de53ukdqyusan" path="res://Background/Map.tscn" id="1_2issh"]
 [ext_resource type="Script" path="res://GameBoard/GameBoard.cs" id="1_nujip"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://lykv1so17rph" path="res://Grid.tres" id="2_pdmrv"]
 [ext_resource type="Texture2D" uid="uid://dgo7cfusbqkea" path="res://Units/squirrel.png" id="4_byvn8"]
 [ext_resource type="PackedScene" uid="uid://htnjn3drjcn1" path="res://GameBoard/Cursor/cursor.tscn" id="4_kklrj"]
+[ext_resource type="PackedScene" uid="uid://beomsqqe8a2dr" path="res://UnitOverlay/UnitOverlay.tscn" id="4_mp3l8"]
 
 [node name="Main" type="Node2D"]
 
@@ -15,7 +16,11 @@
 script = ExtResource("1_nujip")
 _grid = ExtResource("2_pdmrv")
 
+[node name="UnitOverlay" parent="GameBoard" instance=ExtResource("4_mp3l8")]
+modulate = Color(1, 1, 1, 0.392157)
+
 [node name="Unit" parent="GameBoard" instance=ExtResource("2_lcnsa")]
+position = Vector2(500, 400)
 grid = ExtResource("2_pdmrv")
 moveRange = 2
 Skin = ExtResource("4_byvn8")

@@ -126,7 +126,7 @@ public partial class Unit : Path2D
         if (_sprite != null)
         {
             _sprite.Texture = value;
-            _sprite.Position = new Vector2(this.Position.X + SkinOffset.X, this.Position.Y + SkinOffset.Y);
+            //_sprite.Position = new Vector2(this.Position.X + SkinOffset.X, this.Position.Y + SkinOffset.Y);
         }
     }
 

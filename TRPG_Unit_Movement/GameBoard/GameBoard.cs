@@ -10,13 +10,24 @@ public partial class GameBoard : Node2D
     //resources
     [Export] private Grid _grid;
 
+    //cached Nodes
+    UnitOverlay _unitOverlay;
+
     //state variables
     Dictionary<Vector2,Unit> _units = new Dictionary<Vector2,Unit>();
 
     public override void _Ready()
 	{
+        _unitOverlay = GetNode<UnitOverlay>("UnitOverlay");
+        
         _Reinitialize();
-	}
+
+        var testUnit = GetNode<Unit>("Unit");
+
+        var test = GetWalkableCells(testUnit);
+        _unitOverlay.Draw(test);
+
+    }
 
     private bool IsOccupied(Vector2 position)
     {
