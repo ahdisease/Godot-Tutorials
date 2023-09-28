@@ -3,6 +3,10 @@ using System;
 
 public partial class UnitOverlay : TileMap
 {
+    /// <summary>
+    /// Generates overlay on grid given an array of cells
+    /// </summary>
+    /// <param name="cells"></param>
     public void DrawOverlay(Vector2I[] cells)
     {
         Clear();

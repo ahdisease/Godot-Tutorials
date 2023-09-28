@@ -37,6 +37,7 @@ public partial class Cursor : Node2D
 		Position = grid.CalculateMapPosition(cell);
     }
 
+	//Listens for unhandled input events and processes appropriately
 	public override void _UnhandledInput(InputEvent _event) {
 
 		if (_event.GetType() == typeof(InputEventMouseMotion))
@@ -92,7 +93,9 @@ public partial class Cursor : Node2D
         }
     }
 
-	//draws two pixel outline around current cell
+	/// <summary>
+	/// Draws two pixel outline around current cell.
+	/// </summary>
 	private void _draw()
 	{
 		DrawRect(

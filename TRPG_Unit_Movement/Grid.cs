@@ -13,26 +13,32 @@ public partial class Grid : Resource
 		return cellSize / 2;
 	}
 
-	//returns position of cell's center in pixels
+	/// <summary>
+	/// Returns position of cell's center in pixels.
+	/// </summary>
+	/// <param name="cell"></param>
+	/// <returns></returns>
 	public Vector2I CalculateMapPosition(Vector2I cell)
 	{
 		return cell * cellSize + HalfCellSize();
 	}
 	
-	//returns coordinates of the cell given the position on the map
-	public Vector2I CalculateGridCoordinates(Vector2I mapPosition)
-	{
-		Vector2I gridcoordinates = mapPosition / cellSize;
-		return gridcoordinates;
-	}
-
+	/// <summary>
+	/// Returns coordinates of the cell given the position on the map.
+	/// </summary>
+	/// <param name="cell"></param>
+	/// <returns></returns>
     public Vector2I CalculateGridCoordinates(Vector2 mapPosition)
     {
         Vector2 gridcoordinates = mapPosition / cellSize;
         return new Vector2I(Mathf.FloorToInt(gridcoordinates.X), Mathf.FloorToInt(gridcoordinates.Y));
     }
 
-    //checks that cell is witihin the grid; used to prevent cursor/units from leaving grid
+    /// <summary>
+	/// Checks that cell is witihin the grid; used to prevent cursor/units from leaving grid.
+	/// </summary>
+	/// <param name="cellCoordinates"></param>
+	/// <returns></returns>
     public bool IsWithinBounds(Vector2I cellCoordinates)
 	{
 		bool insideX = cellCoordinates.X >= 0 && cellCoordinates.X < size.X;
@@ -40,7 +46,11 @@ public partial class Grid : Resource
 		return insideX && insideY;
 	}
 
-	//clamps a vector2 by coordinates, rather than by total vector length
+	/// <summary>
+	/// Clamps a Vector2I by coordinates, rather than by total vector length
+	/// </summary>
+	/// <param name="gridPosition"></param>
+	/// <returns></returns>
 	public Vector2I Clamp(Vector2I gridPosition)
 	{
 		Vector2I clamppedGridPosition = gridPosition;
@@ -49,6 +59,11 @@ public partial class Grid : Resource
 		return clamppedGridPosition;
 	}
 
+    /// <summary>
+    /// Clamps a Vector2 by coordinates, rather than by total vector length
+    /// </summary>
+    /// <param name="gridPosition"></param>
+    /// <returns></returns>
     public Vector2I Clamp(Vector2 gridPosition)
     {
         Vector2I clamppedGridPosition = new Vector2I(Mathf.FloorToInt(gridPosition.X), Mathf.FloorToInt(gridPosition.Y));
@@ -57,6 +72,11 @@ public partial class Grid : Resource
         return clamppedGridPosition;
     }
 
+	/// <summary>
+	/// Returns a 1D index for a given cell in a 2D grid. Used for AStar2D indexing.
+	/// </summary>
+	/// <param name="cell"></param>
+	/// <returns></returns>
     public long AsIndex(Vector2I cell)
 	{
 		return (cell.X + size.X * cell.Y);

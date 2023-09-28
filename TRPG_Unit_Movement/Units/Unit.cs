@@ -29,7 +29,7 @@ public partial class Unit : Path2D
         SetSkin(Skin);
         _anim_player.Play("idle");
 
-        //set process false
+        //Process is only set to true when walking from point to point
         SetProcess(false);
 
         //initialize cell property by finding the intended cell based on initial position, and correcting that position to fit that cell
@@ -41,12 +41,11 @@ public partial class Unit : Path2D
         {
             Curve = new Curve2D();
         }
-
-        //this code is for testing purposes only
-        //Vector2[] testPath = new Vector2[] {new Vector2(2,2), new Vector2(2, 5), new Vector2(8, 5), new Vector2(8, 7)};
-        //WalkAlong(testPath);
     }
-
+    /// <summary>
+    /// Moves unit's sprite along a path to simulate movement until it reaches the current Cell.
+    /// </summary>
+    /// <param name="delta"></param>
     public override void _Process(double delta)
     {
         //note: the tutorial suggests using "offset",
@@ -71,6 +70,11 @@ public partial class Unit : Path2D
         }
     }
 
+    /// <summary>
+    /// <para>Used to build a path using the Path2D nodes for the Pathfollow2D node to use. Also changes the Cell property location.</para>
+    /// <para>See <seealso cref="Unit._Process(double)"/> for implementation of the created path.</para>
+    /// </summary>
+    /// <param name="path"></param>
     public void WalkAlong(Vector2I[] path)
     {
         //no effect if path is empty
