@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class Unit : Path2D
 {
@@ -42,8 +43,8 @@ public partial class Unit : Path2D
         }
 
         //this code is for testing purposes only
-        Vector2[] testPath = new Vector2[] {new Vector2(2,2), new Vector2(2, 5), new Vector2(8, 5), new Vector2(8, 7)};
-        WalkAlong(testPath);
+        //Vector2[] testPath = new Vector2[] {new Vector2(2,2), new Vector2(2, 5), new Vector2(8, 5), new Vector2(8, 7)};
+        //WalkAlong(testPath);
     }
 
     public override void _Process(double delta)
@@ -75,9 +76,6 @@ public partial class Unit : Path2D
         //no effect if path is empty
         if (path == null || path.Length == 0) return;
 
-        //add 0 as start of curve
-        Curve.AddPoint(Vector2.Zero);
-
         //for each vector in path, add to curve as a point
         //make sure you calculate the desired position
         foreach (Vector2 point in path)
@@ -89,6 +87,7 @@ public partial class Unit : Path2D
 
         //set IsWalking to true
         SetIsWalking(true);
+        return;
     }
 
     //Descriptive functions
@@ -126,7 +125,7 @@ public partial class Unit : Path2D
         if (_sprite != null)
         {
             _sprite.Texture = value;
-            _sprite.Position = new Vector2(this.Position.X + SkinOffset.X, this.Position.Y + SkinOffset.Y);
+            //_sprite.Position = new Vector2(this.Position.X + SkinOffset.X, this.Position.Y + SkinOffset.Y);
         }
     }
 
