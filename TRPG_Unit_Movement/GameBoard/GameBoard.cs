@@ -120,12 +120,18 @@ public partial class GameBoard : Node2D
     
     public void _SelectUnit(Vector2 cell)
     {
-        if (_units[cell] == null)
+   
+        Unit unit;
+        try
+        {
+            unit = _units[cell];
+        }
+        catch (KeyNotFoundException)
         {
             return;
         }
-
-        _activeUnit = _units[cell];
+       
+        _activeUnit = unit;
         _activeUnit.SetIsSelected(true);
         _walkableCells = GetWalkableCells(_activeUnit);
         _unitOverlay.Draw(_walkableCells);
