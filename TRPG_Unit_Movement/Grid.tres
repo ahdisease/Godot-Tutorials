@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Grid" load_steps=2 format=3 uid="uid://lykv1so17rph"]
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://lykv1so17rph"]
 
 [ext_resource type="Script" path="res://Grid.cs" id="1_uqiq1"]
 

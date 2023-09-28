@@ -76,9 +76,6 @@ public partial class Unit : Path2D
         //no effect if path is empty
         if (path == null || path.Length == 0) return;
 
-        //add 0 as start of curve
-        Curve.AddPoint(Vector2.Zero);
-
         //for each vector in path, add to curve as a point
         //make sure you calculate the desired position
         foreach (Vector2 point in path)
