@@ -5,8 +5,8 @@ using System.Linq;
 
 public partial class GameBoard : Node2D
 {
-    //constants
-    readonly Vector2[] DIRECTIONS = new Vector2[] { Vector2.Left, Vector2.Right, Vector2.Up, Vector2.Down };
+    ////constants
+    //readonly Vector2I[] DIRECTIONS = new Vector2[] { Vector2.Left, Vector2.Right, Vector2.Up, Vector2.Down };
 
     //resources
     [Export] private Grid _grid;
@@ -16,9 +16,9 @@ public partial class GameBoard : Node2D
     UnitPath _unitPath;
 
     //state variables
-    Dictionary<Vector2,Unit> _units = new Dictionary<Vector2,Unit>();
+    Dictionary<Vector2I,Unit> _units = new();
     Unit _activeUnit = null;
-    Vector2[] _walkableCells = null;
+    Vector2I[] _walkableCells = null;
     bool _canIssueCommands = true;
 
 
@@ -30,7 +30,7 @@ public partial class GameBoard : Node2D
         _Reinitialize();
     }
 
-    private bool IsOccupied(Vector2 position)
+    private bool IsOccupied(Vector2I position)
     {
         return _units.ContainsKey(position);
     }
@@ -53,23 +53,23 @@ public partial class GameBoard : Node2D
         }
     }
 
-    public Vector2[] GetWalkableCells(Unit unit)
+    public Vector2I[] GetWalkableCells(Unit unit)
     {
         return _FloodFill(unit.Cell, unit.moveRange).ToArray();
     }
 
-    private List<Vector2> _FloodFill(Vector2 cell, int maxDistance)
+    private List<Vector2I> _FloodFill(Vector2I cell, int maxDistance)
     {
-        List<Vector2> fillRange = new List<Vector2>();
+        List<Vector2I> fillRange = new();
 
         //create the stack of cells to check neighbors of for valid traversal
-        Stack<Vector2> toBeChecked = new Stack<Vector2>();
+        Stack<Vector2I> toBeChecked = new();
         toBeChecked.Push(cell);
         
         //loop through until empty
         while (toBeChecked.Count > 0)
         {
-            Vector2 currentCell = toBeChecked.Pop();
+            Vector2I currentCell = toBeChecked.Pop();
 
             if (!_grid.IsWithinBounds(currentCell))
             {
@@ -82,8 +82,8 @@ public partial class GameBoard : Node2D
             }
 
             //ensure that cell is within range of unit's movement
-            Vector2 differenceBetweenCells = (currentCell - cell).Abs();
-            int distanceBetweenCells = Mathf.FloorToInt(differenceBetweenCells.X + differenceBetweenCells.Y);
+            Vector2I differenceBetweenCells = (currentCell - cell).Abs();
+            int distanceBetweenCells = differenceBetweenCells.X + differenceBetweenCells.Y;
             if (distanceBetweenCells > maxDistance)
             {
                 continue;
@@ -98,11 +98,11 @@ public partial class GameBoard : Node2D
         return fillRange;
     }
 
-    private void _AddNeighboringCellsToBeChecked(List<Vector2> fillRange, Stack<Vector2> toBeChecked, Vector2 currentCell)
+    private void _AddNeighboringCellsToBeChecked(List<Vector2I> fillRange, Stack<Vector2I> toBeChecked, Vector2I currentCell)
     {
-        foreach (Vector2 direction in DIRECTIONS)
+        foreach (Vector2I direction in Pathfinder.DIRECTIONS)
         {
-            Vector2 neighboringCell = currentCell + direction;
+            Vector2I neighboringCell = currentCell + direction;
 
             if (IsOccupied(neighboringCell))
             {
@@ -118,7 +118,7 @@ public partial class GameBoard : Node2D
         }
     }
     
-    public void _SelectUnit(Vector2 cell)
+    public void _SelectUnit(Vector2I cell)
     {
    
         Unit unit;
@@ -134,7 +134,7 @@ public partial class GameBoard : Node2D
         _activeUnit = unit;
         _activeUnit.SetIsSelected(true);
         _walkableCells = GetWalkableCells(_activeUnit);
-        _unitOverlay.Draw(_walkableCells);
+        _unitOverlay.DrawOverlay(_walkableCells);
         _unitPath.Initialize(_walkableCells);
     }
 
@@ -158,7 +158,7 @@ public partial class GameBoard : Node2D
         _walkableCells = null;
     }
 
-    public void _MoveActiveUnit(Vector2 newCell)
+    public void _MoveActiveUnit(Vector2I newCell)
     {
         if(IsOccupied(newCell) || !_walkableCells.Contains(newCell))
         {
@@ -180,7 +180,7 @@ public partial class GameBoard : Node2D
         _canIssueCommands = true;
     }
 
-    public void OnCursorAcceptPressed(Vector2 cell)
+    public void OnCursorAcceptPressed(Vector2I cell)
     {
         
         if (_activeUnit == null)
@@ -192,7 +192,7 @@ public partial class GameBoard : Node2D
         }
     }
 
-    public void OnCursorMoved(Vector2 cell)
+    public void OnCursorMoved(Vector2I cell)
     {
         if (_activeUnit != null && _activeUnit.IsSelected)
         {

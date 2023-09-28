@@ -27,7 +27,6 @@ position = Vector2(500, 400)
 grid = ExtResource("2_pdmrv")
 moveRange = 5
 Skin = ExtResource("4_byvn8")
-SkinOffset = Vector2(2, -38)
 
 [node name="Cursor" parent="GameBoard" instance=ExtResource("4_kklrj")]
 

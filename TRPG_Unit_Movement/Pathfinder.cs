@@ -7,12 +7,12 @@ using System.Collections.Generic;
 public partial class Pathfinder : RefCounted
 {
 
-    readonly Vector2[] DIRECTIONS = new Vector2[] { Vector2.Left, Vector2.Right, Vector2.Up, Vector2.Down };
+    public static readonly Vector2I[] DIRECTIONS = new Vector2I[] { Vector2I.Left, Vector2I.Right, Vector2I.Up, Vector2I.Down };
 
     private Grid _grid;
     private AStar2D _astar = new AStar2D();
 
-    public Pathfinder(Grid grid, Vector2[] walkableCells)
+    public Pathfinder(Grid grid, Vector2I[] walkableCells)
     {
         //we can pass these values from the UnitPath script
         _grid = grid;
@@ -20,9 +20,9 @@ public partial class Pathfinder : RefCounted
         //we define a dictionary with cell 2D coordinates as the key and 1D as the value
         //this makes sense from our usage standpoint (we'll be converting from 2D to 1D) but feels opposite
         //to what I've been taught (a single unique value seems a better key)
-        Dictionary<Vector2,int> cellMappings = new Dictionary<Vector2,int>();
+        Dictionary<Vector2I,long> cellMappings = new Dictionary<Vector2I,long>();
 
-        foreach (Vector2 cell in walkableCells)
+        foreach (Vector2I cell in walkableCells)
         {
             cellMappings.Add(cell, _grid.AsIndex(cell));
         }
@@ -31,25 +31,32 @@ public partial class Pathfinder : RefCounted
     }
 
     /// <summary>
-    /// Returns the path found between two cells by the instanced AStar2D object as an array of Vector2 objects.
+    /// Returns the path found between two cells by the instanced AStar2D object as an array of Vector2I objects.
     /// </summary>
     /// <param name="start"></param>
     /// <param name="end"></param>
     /// <returns></returns>
-    public Vector2[] CalculatePointPath(Vector2 start, Vector2 end)
+    public Vector2I[] CalculatePointPath(Vector2I start, Vector2I end)
     {
         //first we confirm both points are valid grid coordinates
-        int startIndex = _grid.AsIndex(start);
-        int endIndex = _grid.AsIndex(end);
+        long startIndex = _grid.AsIndex(start);
+        long endIndex = _grid.AsIndex(end);
 
         if (_astar.HasPoint(endIndex) && _astar.HasPoint(startIndex))
         {
-            //if so, we find the path between them
-            return _astar.GetPointPath((long)startIndex, (long)endIndex); ;
+            Vector2[] path2 = _astar.GetPointPath(startIndex, endIndex);
+            Vector2I[] path2I = new Vector2I[path2.Length];
+
+            for (int i = 0; i < path2.Length; i++)
+            {
+                path2I[i] = new Vector2I(Mathf.FloorToInt(path2[i].X), Mathf.FloorToInt(path2[i].Y));
+            }
+            //if so, we find the path between them (but we need to convert to Vector2I first)
+            return path2I;
         } else
         {
             //otherwise we send back an empty vector (though we could also throw an exception)
-            return Array.Empty<Vector2>();
+            return Array.Empty<Vector2I>();
         }
 
     }
@@ -58,19 +65,19 @@ public partial class Pathfinder : RefCounted
     /// Adds traversable cells to Astar2D object and connects neighboring cells to allow pathfinding 
     /// </summary>
     /// <param name="cellMappings"></param>
-    private void AddAndConnectPoints(Dictionary<Vector2, int> cellMappings)
+    private void AddAndConnectPoints(Dictionary<Vector2I, long> cellMappings)
     {
         //register all points in the AStar graph
-        foreach (Vector2 point in  cellMappings.Keys)
+        foreach (Vector2I point in  cellMappings.Keys)
         {
             _astar.AddPoint(cellMappings[point], point);
         }
         
         //connect points to their neighbors
-        foreach (Vector2 point in cellMappings.Keys)
+        foreach (Vector2I point in cellMappings.Keys)
         {
 
-            List<int> neighborIndices = FindNeighborIndices(point, cellMappings);
+            List<long> neighborIndices = FindNeighborIndices(point, cellMappings);
 
             foreach (int neighborIndex in neighborIndices)
             {
@@ -86,16 +93,16 @@ public partial class Pathfinder : RefCounted
     /// </summary>
     /// <param name="point"></param>
     /// <param name="cellMappings"></param>
-    private List<int> FindNeighborIndices(Vector2 point, Dictionary<Vector2, int> cellMappings)
+    private List<long> FindNeighborIndices(Vector2I point, Dictionary<Vector2I, long> cellMappings)
     {
         //since the number of connections is a little wiggly based on
         //weird math and where things meet, we'll use a list
-        List<int> neighborIndices = new List<int>();
+        List<long> neighborIndices = new List<long>();
 
-        foreach (Vector2 direction in DIRECTIONS)
+        foreach (Vector2I direction in DIRECTIONS)
         {
             //generate a potential neighbor based on directional vector
-            Vector2 neighbor = point + direction;
+            Vector2I neighbor = point + direction;
 
             //only include walkable cells
             if (!cellMappings.ContainsKey(neighbor))

@@ -7,10 +7,10 @@ public partial class Unit : Path2D
     [Export] public Grid grid;
     [Export] public int moveRange;
     [Export] public Texture2D Skin { set; get; }
-    [Export] public Vector2 SkinOffset { set; get; } = Vector2.Zero;
+    [Export] public Vector2I SkinOffset { set; get; } = Vector2I.Zero;
     [Export] public float moveSpeedInPixelsPerSecond = 400f;
 
-    public Vector2 Cell { private set; get; } = Vector2.Zero;
+    public Vector2I Cell { private set; get; } = Vector2I.Zero;
     public bool IsSelected { private set; get; } = false;
     public bool IsWalking { private set; get; } = false;
 
@@ -71,14 +71,14 @@ public partial class Unit : Path2D
         }
     }
 
-    public void WalkAlong(Vector2[] path)
+    public void WalkAlong(Vector2I[] path)
     {
         //no effect if path is empty
         if (path == null || path.Length == 0) return;
 
         //for each vector in path, add to curve as a point
         //make sure you calculate the desired position
-        foreach (Vector2 point in path)
+        foreach (Vector2I point in path)
         {
             Curve.AddPoint(grid.CalculateMapPosition(point)-Position);
         }
@@ -99,7 +99,7 @@ public partial class Unit : Path2D
     }
 
     //specialized setters
-    public void setCell(Vector2 value)
+    public void setCell(Vector2I value)
     {
         Cell = grid.Clamp(value);
     }
@@ -129,7 +129,7 @@ public partial class Unit : Path2D
         }
     }
 
-    public void SetSkinOffset(Vector2 value)
+    public void SetSkinOffset(Vector2I value)
     {
         SkinOffset = value;
         if (_sprite != null)

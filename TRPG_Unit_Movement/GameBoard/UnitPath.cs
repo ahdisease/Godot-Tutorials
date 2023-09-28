@@ -8,9 +8,9 @@ public partial class UnitPath : TileMap
 
 	//state variables
 	private Pathfinder _pathfinder;
-	public Vector2[] CurrentPath { get; private set; }		//cached from pathfinder, used for WalkAlong()
+	public Vector2I[] CurrentPath { get; private set; }		//cached from pathfinder, used for WalkAlong()
 
-	public void Initialize(Vector2[] walkableCells)
+	public void Initialize(Vector2I[] walkableCells)
 	{
 		_pathfinder = new Pathfinder(grid,walkableCells);
 	}
@@ -20,7 +20,7 @@ public partial class UnitPath : TileMap
 	/// </summary>
 	/// <param name="cellStart"></param>
 	/// <param name="cellEnd"></param>
-	public void DrawPath(Vector2 cellStart, Vector2 cellEnd)
+	public void DrawPath(Vector2I cellStart, Vector2I cellEnd)
 	{
         //remove previous values on the tilemap
         Clear();    
@@ -28,12 +28,12 @@ public partial class UnitPath : TileMap
 		//determine the best path between two points
 		CurrentPath = _pathfinder.CalculatePointPath(cellStart, cellEnd);
 
-		//create Godot array to hold Vector2I equivalents of Vector2 objects used in Pathfinder object.
-		//this is necessary because SetCellsTerrainPath has no overload to accept Vector2 objects OR c# array objects 
-		Godot.Collections.Array<Vector2I> currentPathI = new Godot.Collections.Array<Vector2I>();
-		foreach (Vector2 cell in CurrentPath )
+		//create Godot Array to hold Vector2I objects
+		//this is necessary because SetCellsTerrainPath has no overload to accept Vector2I[] 
+		Godot.Collections.Array<Vector2I> currentPathI = new();
+		foreach (Vector2I cell in CurrentPath )
 		{
-			currentPathI.Add(new Vector2I(Mathf.FloorToInt(cell.X), Mathf.FloorToInt(cell.Y)));
+			currentPathI.Add(cell);
 		}
 
 		//this method sets tiles at the vectors returned from the CalculatePointPath method.
@@ -68,28 +68,4 @@ public partial class UnitPath : TileMap
 		Clear();
 	}
 
-    //below implementation of _Ready can be used to test this script until the Gameboard is implemented
-	/*
-    public override void _Ready()
-    {
-        Vector2 rect_start = new Vector2(4,4);
-        Vector2 rect_end = new Vector2(10,8);
-
-		List<Vector2> points = new List<Vector2>();
-
-		for (int x = 0; x <= Mathf.FloorToInt(rect_end.X - rect_start.X); x++)
-		{
-            for (int y = 0; y <= Mathf.FloorToInt(rect_end.Y - rect_start.Y); y++)
-            {
-				points.Add(rect_start + new Vector2(x,y));
-            }
-        }
-
-		Initialize(points.ToArray());
-
-		Vector2 path_end = new Vector2(8, 7);
-
-		DrawPath(rect_start,path_end);
-    }
-	*/
 }
