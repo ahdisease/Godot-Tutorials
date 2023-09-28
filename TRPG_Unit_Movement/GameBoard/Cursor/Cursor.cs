@@ -17,14 +17,14 @@ public partial class Cursor : Node2D
 	[Export] private float uiCooldown = 0.1f;
 
 	//state variables
-	private Vector2 cell = Vector2.Zero;
+	private Vector2I cell = Vector2I.Zero;
 
 	//cached nodes
 	Timer _timer;
 
 	//signals
-	[Signal] public delegate void AcceptPressedEventHandler(Vector2 cell);
-	[Signal] public delegate void CursorMovedEventHandler(Vector2 newCell);
+	[Signal] public delegate void AcceptPressedEventHandler(Vector2I cell);
+	[Signal] public delegate void CursorMovedEventHandler(Vector2I newCell);
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -37,6 +37,7 @@ public partial class Cursor : Node2D
 		Position = grid.CalculateMapPosition(cell);
     }
 
+	//Listens for unhandled input events and processes appropriately
 	public override void _UnhandledInput(InputEvent _event) {
 
 		if (_event.GetType() == typeof(InputEventMouseMotion))
@@ -76,23 +77,25 @@ public partial class Cursor : Node2D
 		//parse directional input
 		if (_event.IsAction("ui_right"))
 		{
-			SetCell(this.cell + Vector2.Right);
+			SetCell(this.cell + Vector2I.Right);
 		}
 		else if (_event.IsAction("ui_up"))
 		{
-            SetCell(this.cell + Vector2.Up);
+            SetCell(this.cell + Vector2I.Up);
         } 
 		else if (_event.IsAction("ui_left"))
         {
-            SetCell(this.cell + Vector2.Left);
+            SetCell(this.cell + Vector2I.Left);
         } 
 		else if (_event.IsAction("ui_down"))
         {
-            SetCell(this.cell + Vector2.Down);
+            SetCell(this.cell + Vector2I.Down);
         }
     }
 
-	//draws two pixel outline around current cell
+	/// <summary>
+	/// Draws two pixel outline around current cell.
+	/// </summary>
 	private void _draw()
 	{
 		DrawRect(
@@ -103,16 +106,16 @@ public partial class Cursor : Node2D
 	}
 
 	//getters
-	public Vector2 GetCell() { return cell; }
+	public Vector2I GetCell() { return cell; }
 
 	//setters
 	public void SetCell(Vector2 newCell)
 	{
 		//confirm new cell is in range
-		Vector2 clampedNewCell = grid.Clamp(newCell);
-
+		Vector2I clampedNewCell = grid.Clamp(newCell);		
+		
 		//no change required if cells match
-		if (clampedNewCell.IsEqualApprox(cell))
+		if (clampedNewCell.Equals(cell))
 		{
 			return;	
 		}

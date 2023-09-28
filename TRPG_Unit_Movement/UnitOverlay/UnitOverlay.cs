@@ -3,13 +3,17 @@ using System;
 
 public partial class UnitOverlay : TileMap
 {
-    public void Draw(Vector2[] cells)
+    /// <summary>
+    /// Generates overlay on grid given an array of cells
+    /// </summary>
+    /// <param name="cells"></param>
+    public void DrawOverlay(Vector2I[] cells)
     {
         Clear();
   
         foreach (var cell in cells) 
         {
-            SetCell(0,new Vector2I(Mathf.FloorToInt(cell.X), Mathf.FloorToInt(cell.Y)),0,Vector2I.Zero);
+            SetCell(0,cell,0,Vector2I.Zero);
         }
     }
 }
