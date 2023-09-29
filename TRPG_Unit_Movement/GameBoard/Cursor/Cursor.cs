@@ -10,11 +10,13 @@ using System;
 [Tool]		//Tool tag allows us to use the script in the editor
 public partial class Cursor : Node2D
 {
-	//resources
-	[Export] private Grid grid;
+    [ExportGroup("Resources")]
+    //resources
+    [Export] private Grid grid;
 
-	//properties
-	[Export] private float uiCooldown = 0.1f;
+    [ExportGroup("Properties")]
+    //properties
+    [Export] private float uiCooldown = 0.1f;
 
 	//state variables
 	private Vector2I cell = Vector2I.Zero;
@@ -25,6 +27,7 @@ public partial class Cursor : Node2D
 	//signals
 	[Signal] public delegate void AcceptPressedEventHandler(Vector2I cell);
 	[Signal] public delegate void CursorMovedEventHandler(Vector2I newCell);
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
