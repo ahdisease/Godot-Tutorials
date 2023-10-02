@@ -4,22 +4,33 @@ using System.Threading.Tasks;
 
 public partial class Unit : Path2D
 {
-    [Export] public Grid grid;
-    [Export] public int moveRange;
-    [Export] public Texture2D Skin { set; get; }
-    [Export] public Vector2I SkinOffset { set; get; } = Vector2I.Zero;
-    [Export] public float moveSpeedInPixelsPerSecond = 400f;
+    [ExportGroup("Resources")]
+    // Resources
+    [Export] private Grid grid;
 
-    public Vector2I Cell { private set; get; } = Vector2I.Zero;
-    public bool IsSelected { private set; get; } = false;
-    public bool IsWalking { private set; get; } = false;
+    [ExportGroup("Properties")]
+    //Properties
 
-    //cached nodes
+    [ExportSubgroup("Movement")]
+    [Export] public int MoveRange { private set; get; }
+    [Export] private float moveSpeedInPixelsPerSecond = 400f;
+
+    [ExportSubgroup("Appearance")]
+    [Export] private Texture2D Skin { set; get; }
+    [Export] private Vector2I SkinOffset { set; get; } = Vector2I.Zero;
+    
+
+    // State variables
+    private Vector2I cell = Vector2I.Zero;
+    private bool isSelected = false;
+    private bool isWalking = false;
+
+    // Cached nodes
     private Sprite2D _sprite;
     private AnimationPlayer _anim_player;
     private PathFollow2D _path_follow;
 
-    //signals
+    // Signals
     [Signal] public delegate void WalkFinishedEventHandler();
 
     public override void _Ready()
@@ -33,8 +44,8 @@ public partial class Unit : Path2D
         SetProcess(false);
 
         //initialize cell property by finding the intended cell based on initial position, and correcting that position to fit that cell
-        Cell = grid.CalculateGridCoordinates(Position);
-        Position = grid.CalculateMapPosition(Cell);
+        cell = grid.CalculateGridCoordinates(Position);
+        Position = grid.CalculateMapPosition(cell);
 
         //create the curve
         if (!Engine.IsEditorHint())
@@ -63,7 +74,7 @@ public partial class Unit : Path2D
 
             //reset properties for future path following
             _path_follow.Progress = 0f;
-            Position = grid.CalculateMapPosition(Cell);
+            Position = grid.CalculateMapPosition(cell);
             Curve.ClearPoints();
 
             EmitSignal("WalkFinished");
@@ -87,14 +98,14 @@ public partial class Unit : Path2D
             Curve.AddPoint(grid.CalculateMapPosition(point)-Position);
         }
         //set unit's cell using the new position
-        setCell(path[path.Length - 1]);
+        SetCell(path[path.Length - 1]);
 
         //set IsWalking to true
         SetIsWalking(true);
         return;
     }
 
-    //Descriptive functions
+    // Descriptive functions
     private void CacheNodes()
     {
         _sprite = GetNode<Sprite2D>("PathFollow2D/Sprite");
@@ -102,16 +113,27 @@ public partial class Unit : Path2D
         _path_follow = GetNode<PathFollow2D>("PathFollow2D");
     }
 
-    //specialized setters
-    public void setCell(Vector2I value)
+    // Getters
+    public Vector2I GetCell()
     {
-        Cell = grid.Clamp(value);
+        return cell;
+    }
+
+    public bool IsSelected()
+    {
+        return isSelected;
+    }
+
+    // Setters
+    public void SetCell(Vector2I value)
+    {
+        cell = grid.Clamp(value);
     }
 
     public void SetIsSelected(bool value)
     {
-        IsSelected = value;
-        if (IsSelected)
+        isSelected = value;
+        if (isSelected)
         {
             _anim_player.Play("selected");
         } else
@@ -144,9 +166,9 @@ public partial class Unit : Path2D
 
     public void SetIsWalking(bool value) 
     { 
-        IsWalking = value;
+        isWalking = value;
 
-        SetProcess(IsWalking);
+        SetProcess(isWalking);
     }
 
 }

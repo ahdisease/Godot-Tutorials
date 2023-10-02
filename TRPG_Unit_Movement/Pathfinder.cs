@@ -2,10 +2,13 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-//RefCounted is the C# equivalent to Reference in GDScript. Because of the
-//garbage collector, unreferenced instances will not instantly be removed
+/// <summary>
+/// A <see cref="RefCounted"/> inheriting object used to generate a path in a grid using the <see cref="AStar2D"/> object
+/// </summary>
 public partial class Pathfinder : RefCounted
 {
+    //RefCounted is the C# equivalent to Reference in GDScript. Because of the
+    //garbage collector, unreferenced instances will not instantly be removed
 
     public static readonly Vector2I[] DIRECTIONS = new Vector2I[] { Vector2I.Left, Vector2I.Right, Vector2I.Up, Vector2I.Down };
 
@@ -18,8 +21,6 @@ public partial class Pathfinder : RefCounted
         _grid = grid;
 
         //we define a dictionary with cell 2D coordinates as the key and 1D as the value
-        //this makes sense from our usage standpoint (we'll be converting from 2D to 1D) but feels opposite
-        //to what I've been taught (a single unique value seems a better key)
         Dictionary<Vector2I,long> cellMappings = new Dictionary<Vector2I,long>();
 
         foreach (Vector2I cell in walkableCells)

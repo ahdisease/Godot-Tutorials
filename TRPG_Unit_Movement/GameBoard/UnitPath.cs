@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 public partial class UnitPath : TileMap
 {
-	//resources
-	[Export] Grid grid;
+    [ExportCategory("Resources")]
+    //resources
+    [Export] private Grid grid;
 
 	//state variables
 	private Pathfinder _pathfinder;

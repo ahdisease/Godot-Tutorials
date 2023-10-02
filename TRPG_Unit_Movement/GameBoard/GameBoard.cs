@@ -5,6 +5,7 @@ using System.Linq;
 
 public partial class GameBoard : Node2D
 {
+    [ExportGroup("Resources")]
     //resources
     [Export] private Grid _grid;
 
@@ -47,13 +48,13 @@ public partial class GameBoard : Node2D
                 continue;
             }
 
-            _units.Add(unit.Cell,unit);
+            _units.Add(unit.GetCell(),unit);
         }
     }
 
     public Vector2I[] GetWalkableCells(Unit unit)
     {
-        return _FloodFill(unit.Cell, unit.moveRange).ToArray();
+        return _FloodFill(unit.GetCell(), unit.MoveRange).ToArray();
     }
 
     /// <summary>
@@ -183,7 +184,7 @@ public partial class GameBoard : Node2D
             return;
         }
 
-        _units.Remove(_activeUnit.Cell);
+        _units.Remove(_activeUnit.GetCell());
         _units[newCell] = _activeUnit;
 
         _DeselectUnit();
@@ -208,7 +209,7 @@ public partial class GameBoard : Node2D
         if (_activeUnit == null)
         {
             _SelectUnit(cell);
-        } else if (_activeUnit.IsSelected)
+        } else if (_activeUnit.IsSelected())
         {
             _MoveActiveUnit(cell);
         }
@@ -220,9 +221,9 @@ public partial class GameBoard : Node2D
     /// <param name="cell"></param>
     public void OnCursorMoved(Vector2I cell)
     {
-        if (_activeUnit != null && _activeUnit.IsSelected)
+        if (_activeUnit != null && _activeUnit.IsSelected())
         {
-            _unitPath.DrawPath(_activeUnit.Cell, cell);
+            _unitPath.DrawPath(_activeUnit.GetCell(), cell);
         }
     }
 }

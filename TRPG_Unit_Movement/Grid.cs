@@ -3,7 +3,8 @@ using System;
 [GlobalClass]
 public partial class Grid : Resource
 {
-	[Export]
+    [ExportGroup("Dimensions")]
+    [Export]
 	public Vector2I size = new Vector2I(20,20);
 	[Export]
 	public Vector2I cellSize = new Vector2I(80,80);
