@@ -1,6 +1,8 @@
 # Godot Tutorials
 This repo is made up of three directories, representing three different tutorials that were completed. These were my first forays into Godot, though I have previous experience using the Unity game engine. Godot Sharp 4.1 was used for all tutorials. Most scripting was completed in C#, including TRPG_Unit_Movement, whose tutorial only provides code in GDScript.
 
+The last two (dodge_the_creeps and TRPG_Unit_Movement) have playable versions available in the [Builds](./Builds) directory.
+
 ## [step_by_step](./step_by_step/) 
 A basic walkthrough of Nodes, Scenes, Input, and Signals in Godot. As this was my first exposure to Godot, I followed along with both GDScript and C#. See the tutorial followed [here](https://docs.godotengine.org/en/stable/getting_started/step_by_step/index.html).
 
