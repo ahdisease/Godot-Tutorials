@@ -226,4 +226,13 @@ public partial class GameBoard : Node2D
             _unitPath.DrawPath(_activeUnit.GetCell(), cell);
         }
     }
+
+    public override void _UnhandledInput(InputEvent _event)
+    {
+        if(_activeUnit != null && _event.IsActionPressed("ui_cancel")) 
+        {
+            _DeselectUnit();
+            _ClearActiveUnit();
+        }
+    }
 }
