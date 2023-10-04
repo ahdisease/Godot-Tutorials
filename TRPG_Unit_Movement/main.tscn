@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://ceedn31sbjd1k"]
+[gd_scene load_steps=10 format=3 uid="uid://ceedn31sbjd1k"]
 
 [ext_resource type="PackedScene" uid="uid://de53ukdqyusan" path="res://Background/Map.tscn" id="1_2issh"]
 [ext_resource type="Script" path="res://GameBoard/GameBoard.cs" id="1_nujip"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://htnjn3drjcn1" path="res://GameBoard/Cursor/cursor.tscn" id="4_kklrj"]
 [ext_resource type="PackedScene" uid="uid://beomsqqe8a2dr" path="res://UnitOverlay/UnitOverlay.tscn" id="4_mp3l8"]
 [ext_resource type="PackedScene" uid="uid://c5ah3vwy1bkmu" path="res://GameBoard/UnitPath.tscn" id="5_jdg70"]
+[ext_resource type="Texture2D" uid="uid://dd7qfwh3rq47t" path="res://Units/bear.png" id="8_rp0cs"]
 
 [node name="Main" type="Node2D"]
 
@@ -28,8 +29,15 @@ grid = ExtResource("2_pdmrv")
 MoveRange = 4
 Skin = ExtResource("4_byvn8")
 
+[node name="Unit2" parent="GameBoard" instance=ExtResource("2_lcnsa")]
+position = Vector2(704, 400)
+grid = ExtResource("2_pdmrv")
+MoveRange = 4
+Skin = ExtResource("8_rp0cs")
+
 [node name="Cursor" parent="GameBoard" instance=ExtResource("4_kklrj")]
 
 [connection signal="WalkFinished" from="GameBoard/Unit" to="GameBoard" method="_ResetCanIssueCommands"]
+[connection signal="WalkFinished" from="GameBoard/Unit2" to="GameBoard" method="_ResetCanIssueCommands"]
 [connection signal="AcceptPressed" from="GameBoard/Cursor" to="GameBoard" method="OnCursorAcceptPressed"]
 [connection signal="CursorMoved" from="GameBoard/Cursor" to="GameBoard" method="OnCursorMoved"]
